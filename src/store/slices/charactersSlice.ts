@@ -54,6 +54,9 @@ const charactersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchCharacters.pending, (state) => {
+        state.loading = true
+      })
       .addCase(fetchCharacters.fulfilled, (state, action) => {
         state.loading = false
         state.list = action.payload.results
