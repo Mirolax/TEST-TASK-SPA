@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import { debounce } from 'lodash'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from './redux.ts'
 import type { Character } from './types'
@@ -13,6 +14,15 @@ export default function CharacterList() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { list, currentPage, total, search, loading } = useAppSelector(state => state.characters)
+  
+  const [searchValue, setSearchValue] = useState(search)
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      dispatch(setSearch(value))
+      dispatch(setCurrentPage(1)) 
+    }, 500),
+    [dispatch]
+  )
 
   useEffect(() => {
     dispatch(fetchCharacters({ page: currentPage, search }))
@@ -24,8 +34,8 @@ export default function CharacterList() {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    dispatch(setSearch(value))
-    dispatch(setCurrentPage(1))
+    setSearchValue(value) 
+    debouncedSearch(value)
   }
 
   const handleCharacterClick = (character: Character) => {
@@ -43,12 +53,12 @@ export default function CharacterList() {
           </div>
 
           <Input
-            size="large"
+            size="small"
             placeholder="Search characters..."
             prefix={<SearchOutlined />}
-            value={search}
+            value={searchValue}
             onChange={handleSearch}
-            style={{ maxWidth: '400px', margin: '0 auto', display: 'block' }}
+            style={{ maxWidth: '300px', margin: '0 auto', display: 'flex', padding: 10 }}
           />
 
           {loading ? (

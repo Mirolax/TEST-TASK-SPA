@@ -25,7 +25,7 @@ export const fetchCharacters = createAsyncThunk(
   async ({ page = 1, search = '' }: { page: number; search: string }): Promise<CharactersResponse> => {
     let url = `https://swapi.dev/api/people/?page=${page}`
     if (search) {
-      url = `https://swapi.dev/api/people/?search=${search}`
+      url = `https://swapi.dev/api/people/?search=${search}&page=${page}`
     }
     
     const response = await fetch(url)
