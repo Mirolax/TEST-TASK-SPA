@@ -329,7 +329,7 @@ export default function CharacterList() {
                 letterSpacing: '3px'
               }}
             >
-              Тестовой задание v2
+              Тестовое задание v2
             </Title>
             <Text style={{ color: '#ccc', fontSize: '16px' }}>
               Найдено: <span style={{ color: '#ffe81f', fontWeight: 'bold' }}>
