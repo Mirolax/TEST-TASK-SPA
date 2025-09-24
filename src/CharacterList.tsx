@@ -48,8 +48,8 @@ export default function CharacterList() {
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div style={{ textAlign: 'center' }}>
-            <Title level={1}>Тестовое задание </Title>
-            <Text type="secondary">Total: {list.length} characters</Text>
+            <Title level={1}>Тестовое задание v2 </Title>
+            <Text type="secondary">Всего найдено: {list.length} characters</Text>
           </div>
 
           <Input
@@ -63,7 +63,7 @@ export default function CharacterList() {
 
           {loading ? (
             <div style={{ textAlign: 'center', padding: '40px' }}>
-              <Spin size="large" />
+              <Spin size="small" />
             </div>
           ) : (
             <Row gutter={[16, 16]}>
@@ -74,9 +74,9 @@ export default function CharacterList() {
                       title={person.name}
                       description={
                         <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                          <Text>Height: {person.height}</Text>
-                          <Text>Mass: {person.mass}</Text>
-                          <Text>Birth: {person.birth_year}</Text>
+                          <Text>Рост: {person.height}</Text>
+                          <Text>Вес: {person.mass}</Text>
+                          <Text>Планета: {person.birth_year}</Text>
                         </Space>
                       }
                     />
