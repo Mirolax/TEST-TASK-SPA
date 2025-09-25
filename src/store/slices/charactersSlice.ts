@@ -11,6 +11,14 @@ interface CharactersState {
   error: string | null
 }
 
+const loadEditedCharacters = () => {
+  try {
+    return JSON.parse(localStorage.getItem('editedCharacters') || '{}')
+  } catch {
+    return {}
+  }
+}
+
 const initialState: CharactersState = {
   list: [],
   currentPage: 1,
@@ -47,8 +55,24 @@ const charactersSlice = createSlice({
     updateCharacter: (state, action: PayloadAction<{ id: string; data: CharacterForm }>) => {
       const { id, data } = action.payload
       const characterIndex = state.list.findIndex(char => char.url.includes(id))
+      
       if (characterIndex !== -1) {
-        state.list[characterIndex] = { ...state.list[characterIndex], ...data }
+        const updatedCharacter = { ...state.list[characterIndex], ...data }
+        state.list[characterIndex] = updatedCharacter
+        
+        const editedCharacters = loadEditedCharacters()
+        editedCharacters[id] = updatedCharacter
+        localStorage.setItem('editedCharacters', JSON.stringify(editedCharacters))
+      }
+    },
+    resetCharacterChanges: (state, action: PayloadAction<string>) => {
+      const id = action.payload
+      const editedCharacters = loadEditedCharacters()
+      delete editedCharacters[id]
+      localStorage.setItem('editedCharacters', JSON.stringify(editedCharacters))
+      
+      const characterIndex = state.list.findIndex(char => char.url.includes(id))
+      if (characterIndex !== -1) {
       }
     },
   },
@@ -56,14 +80,21 @@ const charactersSlice = createSlice({
     builder
       .addCase(fetchCharacters.pending, (state) => {
         state.loading = true
+        state.error = null
       })
       .addCase(fetchCharacters.fulfilled, (state, action) => {
         state.loading = false
-        state.list = action.payload.results
+        const editedCharacters = loadEditedCharacters()
+        
+        state.list = action.payload.results.map(character => {
+          const characterId = character.url.split('/').filter(Boolean).pop()!
+          return editedCharacters[characterId] || character
+        })
+        
         state.total = action.payload.count
       })
   },
 })
 
-export const { setCurrentPage, setSearch, updateCharacter } = charactersSlice.actions
+export const { setCurrentPage, setSearch, updateCharacter, resetCharacterChanges } = charactersSlice.actions
 export default charactersSlice.reducer

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import type { CharacterForm, Character } from './types'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { Button, Card, Form, Input, Space, Typography, Row, Col, Divider, message } from 'antd'
+import { Button, Card, Form, Input, Space, Typography, Row, Col, Divider } from 'antd'
 import { ArrowLeftOutlined, EditOutlined, SaveOutlined, CloseOutlined } from '@ant-design/icons'
 import { updateCharacter } from '../src/store/slices/charactersSlice.ts'
 
@@ -24,38 +24,13 @@ export default function CharacterCard() {
     }
   }, [character, form])
 
-  if (!currentCharacter) {
-    return (
-      <div style={{ 
-        padding: '24px', 
-        textAlign: 'center', 
-        minHeight: '100vh',
-        background: '#000',
-        color: '#ffe81f'
-      }}>
-        <Title level={2} style={{ color: '#ffe81f' }}>Персонаж не найден</Title>
-        <Button 
-          type="primary" 
-          onClick={() => navigate('/')}
-          style={{ 
-            background: '#ffe81f', 
-            borderColor: '#ffe81f',
-            color: '#000',
-            fontWeight: 'bold'
-          }}
-        >
-          Назад к списку
-        </Button>
-      </div>
-    )
-  }
+  if (!currentCharacter)  return 
 
   const handleSave = (values: CharacterForm) => {
     const id = currentCharacter.url.split('/').filter(Boolean).pop()
     if (id) {
       dispatch(updateCharacter({ id, data: values }))
       setCurrentCharacter(prev => prev ? { ...prev, ...values } : undefined)
-      message.success('Изменения сохранены!')
     }
     setEditMode(false)
   }

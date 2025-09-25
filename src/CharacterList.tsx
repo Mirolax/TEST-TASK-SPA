@@ -52,7 +52,7 @@ export default function CharacterList() {
     
     setTimeout(() => {
       navigate(`/character/${id}`, { state: { character } })
-    }, 300)
+    }, 90)
   }
 
   const StarWarsLoader = () => (
